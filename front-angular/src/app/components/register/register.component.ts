@@ -4,32 +4,31 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'tm-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  selector: 'tm-register',
+  templateUrl: './register.component.html'
 })
-export class LoginComponent {
-  loginForm: FormGroup;
+export class RegisterComponent {
+  registerForm: FormGroup;
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private fb: FormBuilder
   ) {
-    this.loginForm = this.fb.group({
+    this.registerForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]]
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
   async onSubmit() {
-    if (this.loginForm.valid) {
+    if (this.registerForm.valid) {
       try {
-        const { email, password } = this.loginForm.value;
-        await this.authService.login(email, password);
+        const { email, password } = this.registerForm.value;
+        await this.authService.register(email, password);
         await this.router.navigate(['/home']);
       } catch (error) {
-        console.error('Erreur de connexion:', error);
+        console.error('Erreur d\'inscription:', error);
       }
     }
   }
