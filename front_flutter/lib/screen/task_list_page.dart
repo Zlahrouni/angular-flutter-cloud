@@ -18,7 +18,7 @@ class _TaskListPageState extends State<TaskListPage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Task>>(
-      future: taskService.getTasks(),  // Fetch tasks
+      future: taskService.getTasks(), // Fetch tasks
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -46,21 +46,19 @@ class _TaskListPageState extends State<TaskListPage> {
             }
 
             // Debug print statements
-            print('Task: ${task.title}, Status: ${task.status}, NextStatutLabel: $nextStatutLabel');
+            print(
+                'Task: ${task.title}, Status: ${task.status}, NextStatutLabel: $nextStatutLabel');
 
             return Slidable(
               key: ValueKey(task.id),
-              startActionPane: ActionPane(
-                  motion: const ScrollMotion(),
-                  children: [
-                    SlidableAction(
-                        onPressed: (context) async {
-
-                        },
-                        backgroundColor: Colors.grey,
-                        icon: Icons.edit,
-                    )
-                  ]),
+              startActionPane:
+                  ActionPane(motion: const ScrollMotion(), children: [
+                SlidableAction(
+                  onPressed: (context) async {},
+                  backgroundColor: Colors.grey,
+                  icon: Icons.edit,
+                )
+              ]),
               endActionPane: ActionPane(
                 motion: const ScrollMotion(),
                 children: [
@@ -78,14 +76,18 @@ class _TaskListPageState extends State<TaskListPage> {
                           updatedTask.status = 'pending';
                         }
 
-                        Task returnedTask = await taskService.updateTask(task.id, updatedTask);
+                        Task returnedTask =
+                            await taskService.updateTask(task.id, updatedTask);
                         setState(() {
                           snapshot.data![index] = returnedTask;
                         });
                       },
-                      backgroundColor: nextStatutLabel == 'end' ? Colors.green : Colors.blue,
+                      backgroundColor:
+                          nextStatutLabel == 'end' ? Colors.green : Colors.blue,
                       foregroundColor: Colors.white,
-                      icon: nextStatutLabel == 'end' ? Icons.done : Icons.pending_actions,
+                      icon: nextStatutLabel == 'end'
+                          ? Icons.done
+                          : Icons.pending_actions,
                       label: nextStatutLabel,
                     ),
                   SlidableAction(
@@ -103,7 +105,9 @@ class _TaskListPageState extends State<TaskListPage> {
                 ],
               ),
               child: Container(
-                color: nextStatutLabel == '' ? Colors.red.shade100 : Colors.transparent,
+                color: nextStatutLabel == ''
+                    ? Colors.red.shade100
+                    : Colors.transparent,
                 child: ListTile(
                   title: Text(task.title),
                   subtitle: Text(task.description),
