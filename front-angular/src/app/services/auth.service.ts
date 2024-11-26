@@ -1,6 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, user, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
-import { Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {
+  Auth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  user
+} from '@angular/fire/auth';
+import firebase from "firebase/compat";
+import GoogleAuthProvider = firebase.auth.GoogleAuthProvider;
 
 @Injectable({
   providedIn: 'root'
@@ -14,14 +22,14 @@ export class AuthService {
   async loginWithGoogle() {
     try {
       const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(this.auth, provider);
-      return result;
+      return await signInWithPopup(this.auth, provider);
     } catch (error) {
       throw error;
     }
   }
 
   // Connexion avec email/password
+  // Connexion
   async login(email: string, password: string) {
     try {
       const result = await signInWithEmailAndPassword(this.auth, email, password);
