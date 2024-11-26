@@ -8,7 +8,6 @@ import { NavarComponent } from './components/navar/navar.component';
 import { HomeComponent } from './components/home/home.component';
 import { environment } from './environements/environements';
 
-
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getAuth, provideAuth } from '@angular/fire/auth';
