@@ -1,1 +1,20 @@
-<p>home works!</p>
+<div class="m-15 flex flex-col justify-center">
+  <h1 class="text-3xl py-5">All tasks:</h1>
+
+  <div *ngIf="message" class="text-gray-500">{{ message }}</div>
+
+  <div *ngIf="tasks.length === 0 && !message" class="text-red-500">
+    No tasks available.
+  </div>
+
+  <div *ngIf="tasks.length > 0" class="flex flex-wrap gap-3">
+    <div
+      *ngFor="let task of tasks"
+      class="bg-sky-300 min-w-[300px] p-4 border-2 rounded-lg transition-transform transform hover:scale-105 hover:shadow-lg"
+    >
+      <p><strong>Title:</strong> {{ task.title }}</p>
+      <p><strong>Description:</strong> {{ task.description }}</p>
+      <p><strong>Status:</strong> {{ task.status }}</p>
+    </div>
+  </div>
+</div>
