@@ -2,13 +2,13 @@ import {Injectable} from '@angular/core';
 import {
   Auth,
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
   user
 } from '@angular/fire/auth';
-import firebase from "firebase/compat";
-import GoogleAuthProvider = firebase.auth.GoogleAuthProvider;
+
 
 @Injectable({
   providedIn: 'root'
