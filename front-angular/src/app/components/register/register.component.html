@@ -12,14 +12,34 @@
             <input id="email" formControlName="email" type="email" autocomplete="email" required 
               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6">
           </div>
+          <div *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="text-red-500 text-sm mt-1">
+            <div *ngIf="email?.errors?.['required']">L'email est requis</div>
+            <div *ngIf="email?.errors?.['email']">L'email n'est pas valide</div>
+          </div>
         </div>
   
         <div>
-          <label for="password" class="block text-sm/6 font-medium text-gray-900">Mot de passe</label>
-          <div class="mt-2">
-            <input id="password" formControlName="password" type="password" autocomplete="new-password" required 
-              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6">
-          </div>
+            <label for="password" class="block text-sm/6 font-medium text-gray-900">Mot de passe</label>
+            <div class="mt-2">
+                <input id="password" formControlName="password" type="password" autocomplete="new-password" required 
+                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6">
+            </div>
+            <div *ngIf="password?.invalid && (password?.dirty || password?.touched)" class="text-red-500 text-sm mt-1">
+                <div *ngIf="password?.errors?.['required']">Le mot de passe est requis</div>
+                <div *ngIf="password?.errors?.['minlength']">Le mot de passe doit contenir au moins 6 caractères</div>
+            </div>
+        </div>
+
+        <div>
+            <label for="confirmPassword" class="block text-sm/6 font-medium text-gray-900">Confirmer le mot de passe</label>
+            <div class="mt-2">
+                <input id="confirmPassword" formControlName="confirmPassword" type="password" required 
+                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6">
+            </div>
+            <div *ngIf="confirmPassword?.invalid && (confirmPassword?.dirty || confirmPassword?.touched)" class="text-red-500 text-sm mt-1">
+                <div *ngIf="confirmPassword?.errors?.['required']">La confirmation du mot de passe est requise</div>
+                <div *ngIf="confirmPassword?.errors?.['passwordMismatch']">Les mots de passe ne correspondent pas</div>
+            </div>
         </div>
   
         <div>
@@ -34,18 +54,8 @@
         Déjà inscrit ?
         <a routerLink="" class="font-semibold text-indigo-600 hover:text-indigo-500">Connectez-vous</a>
       </p>
+
   
-      <hr class="my-12 h-0.5 border-t-0 bg-neutral-100 dark:bg-black/15" />
-  
-      <div class="px-6 sm:px-0 max-w-sm">
-        <button type="button" (click)="loginWithGoogle()"
-          class="text-white w-full bg-indigo-600 hover:bg-indigo-600/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-between mr-2 mb-2">
-          <svg class="mr-2 -ml-1 w-4 h-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
-            <path fill="currentColor" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"></path>
-          </svg>
-          Inscrivez-vous avec Google
-          <div></div>
-        </button>
-      </div>
+
     </div>
   </div>
