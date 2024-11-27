@@ -17,10 +17,27 @@ class _TaskListPageState extends State<TaskListPage> {
   List<Task>? tasks;
 
   @override
+
   void initState() {
     super.initState();
     _fetchTasks();
   }
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<Task>>(
+      future: taskService.getTasks(), // Fetch tasks
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.hasError) {
+          return Center(child: Text("Error: ${snapshot.error}"));
+        }
+
+        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(child: Text("No tasks available"));
+        }
+
 
   Future<void> _fetchTasks() async {
     final fetchedTasks = await taskService.getTasks();

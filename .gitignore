@@ -1,2 +1,3 @@
 /.idea
 front-angular/pnpm-lock.yaml
+front_flutter/android/gradle.properties
