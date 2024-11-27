@@ -4,7 +4,9 @@ import '../models/task.dart';
 import '../services/task_service.dart';
 
 class AddTaskPage extends StatefulWidget {
-  const AddTaskPage({super.key});
+  final VoidCallback onTaskAdded;
+
+  const AddTaskPage({super.key, required this.onTaskAdded});
 
   @override
   State<AddTaskPage> createState() => _AddTaskPageState();
@@ -14,7 +16,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TaskService _taskService = TaskService();
-
 
   @override
   void dispose() {
@@ -26,44 +27,25 @@ class _AddTaskPageState extends State<AddTaskPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add new Task'),
-      ),
+      appBar: AppBar(title: const Text('Add Task')),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextField(
               controller: _titleController,
-              autofocus: true,
-              decoration: const InputDecoration(
-                hintText: 'Title',
-              ),
+              decoration: const InputDecoration(labelText: 'Title'),
             ),
             TextField(
               controller: _descriptionController,
-              decoration: const InputDecoration(
-                hintText: 'Description',
-              ),
+              decoration: const InputDecoration(labelText: 'Description'),
             ),
             const SizedBox(height: 15),
             ElevatedButton(
               onPressed: () async {
-                final title = _titleController.text;
-                final description = _descriptionController.text;
-
-                if (title.isNotEmpty && description.isNotEmpty) {
-                  final newTask = Task(
-                    id: _taskService.uuid.v4(),
-                    title: title,
-                    description: description,
-                    status: 'todo',
-                    date: DateTime.now(),
-                  );
-                  await _taskService.addTask(newTask.title, newTask.description);
-                  Navigator.pop(context, newTask);  // Return the new task
-                }
+                // Add task logic
+                await _taskService.addTask(_titleController.text, _descriptionController.text);
+                widget.onTaskAdded(); // Notify parent widget
               },
               child: const Text('Add Task'),
             ),
