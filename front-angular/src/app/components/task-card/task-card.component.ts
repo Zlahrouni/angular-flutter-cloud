@@ -26,7 +26,7 @@ export class TaskCardComponent {
   deleteTask(id: string) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent);
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
         this.taskService.deleteTask(id).subscribe();
       }
