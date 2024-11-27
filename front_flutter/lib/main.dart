@@ -106,14 +106,18 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
           },
         ),
-        bottomNavigationBar: ConvexAppBar(
-          backgroundColor: Colors.grey,
-
-          items: const [
-            TabItem(icon: Icons.add, title: 'Add'),
-          ],
-          initialActiveIndex: 0, //optional, default as 0
-          onTap: (int i) => print('click index=$i'),
+        bottomNavigationBar: StreamBuilder<User?>(
+          stream: authService.authStateChanges,
+          builder: (context, snapshot) => snapshot.hasData
+              ? ConvexAppBar(
+            backgroundColor: Colors.grey,
+            items: const [
+              TabItem(icon: Icons.add, title: 'Add'),
+            ],
+            initialActiveIndex: 0,
+            onTap: (int i) => print('click index=$i'),
+          )
+              : const SizedBox.shrink(), // Utilise SizedBox.shrink() à la place du Container
         ));
   }
 }
