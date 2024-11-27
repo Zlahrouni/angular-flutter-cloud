@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
 import 'package:front_flutter/models/task.dart';
 
 
 class TaskService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final Uuid uuid = Uuid();
 
   // Fetch tasks from Firestore
   Future<List<Task>> getTasks() async {
@@ -19,9 +21,18 @@ class TaskService {
   }
 
   // Add a new task to Firestore
-  Future<void> addTask(Task task) async {
+  Future<void> addTask(String title, String description) async {
+    Task newTask = Task(
+        id: uuid.v4(),
+        title: title,
+        description: description,
+        status: 'todo',
+        date: DateTime.now()
+    );
+    print("TaskID: ${newTask.id}");
+    print("Task: ${newTask.toMap()}");
     try {
-      await _firestore.collection('tasks').add(task.toMap());  // Assuming Task has a toMap method
+      await _firestore.collection('task').doc(newTask.id).set(newTask.toMap());  // Assuming Task has a toMap method
     } catch (e) {
       print("Error adding task: $e");
       throw e;
@@ -48,5 +59,13 @@ class TaskService {
       print("Error deleting task: $e");
       throw e;
     }
+  }
+
+  Stream<List<Task>> streamTasks() {
+    return _firestore.collection('task').snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return Task.fromFirestore(doc);
+      }).toList();
+    });
   }
 }
