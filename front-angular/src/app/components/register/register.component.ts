@@ -59,7 +59,7 @@ export class RegisterComponent {
       try {
         const { email, password } = this.registerForm.value;
         await this.authService.register(email, password);
-        await this.router.navigate(['/home']);
+        await this.router.navigate(['']);
       } catch (error) {
         console.error('Erreur d\'inscription:', error);
       }
@@ -69,7 +69,7 @@ export class RegisterComponent {
   async loginWithGoogle() {
     try {
       await this.authService.loginWithGoogle();
-      await this.router.navigate(['/home']);
+      await this.router.navigate(['']);
     } catch (error) {
       console.error('Erreur de connexion Google:', error);
     }

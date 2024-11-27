@@ -6,11 +6,12 @@ import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponent} from "../confirm-dialog/confirm-dialog.component";
 import {TruncatePipe} from "../../truncate.pipe";
 import {RouterLink} from "@angular/router";
+import { SmartTruncatePipe } from 'src/app/pipes/smart-truncate.pipe';
 
 @Component({
   selector: 'tm-task-card',
   standalone: true,
-  imports: [DateformatorPipe, TruncatePipe, RouterLink],
+  imports: [DateformatorPipe, TruncatePipe, RouterLink, SmartTruncatePipe],
   templateUrl: './task-card.component.html',
   styleUrls: ['./task-card.component.scss']
 })

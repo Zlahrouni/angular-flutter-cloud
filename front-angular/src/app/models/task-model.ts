@@ -4,4 +4,5 @@ export interface Task {
     description:string;
     status:string;
     date:any;
+    author?:string;
 }

@@ -24,7 +24,7 @@ export class NavarComponent implements OnInit {
   async logout() {
     try {
       await this.authService.logout();
-      await this.router.navigate(['']);
+      this.gotoLogin();
     } catch (error) {
       console.error('Erreur de déconnexion:', error);
     }

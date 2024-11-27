@@ -31,7 +31,7 @@ export class LoginComponent {
       try {
         const { email, password } = this.loginForm.value;
         await this.authService.login(email, password);
-        await this.router.navigate(['/']);
+        await this.router.navigate(['']);
       } catch (error) {
         console.error('Erreur de connexion:', error);
       }
@@ -41,7 +41,7 @@ export class LoginComponent {
   async loginWithGoogle() {
     try {
       await this.authService.loginWithGoogle();
-      await this.router.navigate(['/home']);
+      await this.router.navigate(['']);
     } catch (error) {
       console.error('Erreur de connexion Google:', error);
     }

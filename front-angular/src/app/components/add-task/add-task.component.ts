@@ -3,6 +3,9 @@ import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import { TaskService } from "../../services/task.service";
 import {CommonModule} from "@angular/common";
+import { AuthService } from 'src/app/services/auth.service';
+import { map, take } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'tm-add-task',
@@ -17,10 +20,14 @@ export class AddTaskComponent implements OnInit {
 
   form!: FormGroup;
   messageErrors: string[] = [];
+  user$ = this.authservice.user$;
+  author$ = this.authservice.user$.pipe(map(user => user?.email));
 
   constructor(
     private fb: FormBuilder,
-    private taskService: TaskService
+    private taskService: TaskService,
+    private authservice: AuthService,
+    private router: Router 
   ) {
 
   }
@@ -32,7 +39,7 @@ export class AddTaskComponent implements OnInit {
     });
   }
 
-  submitNewTask() {
+  async submitNewTask() {
     console.log('Started');
     this.messageErrors = [];
 
@@ -51,12 +58,21 @@ export class AddTaskComponent implements OnInit {
       }
 
       console.log('Message Error : ', this.messageErrors);
+
       return;
     }
 
     const title = this.form.get('title')!.value;
     const description = this.form.get('description')!.value;
 
-    this.taskService.addTask(title, description).subscribe();
+
+    this.author$.pipe(
+      take(1)
+    ).subscribe(async author => {
+      await this.taskService.addTask(title, description, author as string).subscribe();
+    });
+
+    await this.router.navigate(['']);
+    
   }
 }

@@ -26,12 +26,13 @@ export class TaskService {
   }
 
   // Update the addTask method in TaskService to ensure the returned object matches the Task type
-  addTask(title: string, description: string): Observable<Task> {
+  addTask(title: string, description: string, author: string): Observable<Task> {
     const taskWithTimestamp: Task = {
       title,
       description,
       status: 'todo',
-      date: new Date()
+      date: new Date(),
+      author
     };
 
     return from(addDoc(this.taskCollection, taskWithTimestamp)).pipe(
