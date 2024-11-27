@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 import 'package:front_flutter/models/task.dart';
@@ -39,6 +41,18 @@ class TaskService {
     }
   }
 
+  getTaskByAuthor(String email) async {
+    try {
+      QuerySnapshot snapshot = await _firestore.collection('task').where('author', isEqualTo: email).get();
+      return snapshot.docs.map((doc) {
+        return Task.fromFirestore(doc);
+      }).toList();
+    } catch (e) {
+      print("Error fetching tasks: $e");
+      rethrow;  // Propagate the error
+    }
+  }
+
   // Update the updateTask method in TaskService to return the updated Task
   Future<Task> updateTask(String taskId, Task task) async {
     try {
@@ -68,4 +82,15 @@ class TaskService {
       }).toList();
     });
   }
+
+  Stream<List<Task>> steamTasksByAuthor(String author) {
+    print('author: $author');
+    return _firestore.collection('task').where('author', isEqualTo: author).snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return Task.fromFirestore(doc);
+      }).toList();
+    });
+  }
+
+
 }
