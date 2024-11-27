@@ -1,6 +1,7 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:front_flutter/screen/add_task_page.dart';
 import 'package:front_flutter/screen/task_list_page.dart';
 import 'package:front_flutter/services/task_service.dart';
 
@@ -29,6 +30,9 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Flutter Demo Homef Page'),
+      routes: {
+        'addTask': (context) => const AddTaskPage(),
+      },
     );
   }
 }
@@ -67,7 +71,14 @@ class _MyHomePageState extends State<MyHomePage> {
           TabItem(icon: Icons.add, title: 'Add'),
         ],
         initialActiveIndex: 0, //optional, default as 0
-        onTap: (int i) => print('click index=$i'),
+        onTap: (int i) => {
+          if (i == 0) {
+            Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddTaskPage()),
+          )
+          }
+        }
       )
     );
   }
