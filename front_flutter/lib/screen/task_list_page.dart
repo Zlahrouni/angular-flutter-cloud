@@ -4,6 +4,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import '../models/task.dart';
 import '../services/task_service.dart';
 import 'add_task_page.dart';
+import 'edit_task_page.dart';
 
 class TaskListPage extends StatefulWidget {
   const TaskListPage({super.key});
@@ -65,7 +66,14 @@ class _TaskListPageState extends State<TaskListPage> {
                       motion: const ScrollMotion(),
                       children: [
                         SlidableAction(
-                          onPressed: (context) async {},
+                          onPressed: (context) async {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => EditTaskPage(task: task),
+                              ),
+                            );
+                          },
                           backgroundColor: Colors.grey,
                           icon: Icons.edit,
                         )
