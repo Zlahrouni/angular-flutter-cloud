@@ -7,6 +7,8 @@ import { DateformatorPipe } from '../../pipes/dateformator.pipe';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import {NgIf} from "@angular/common";
+import { map, Observable } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'tm-task-details',
@@ -24,12 +26,24 @@ export class TaskDetailsComponent implements OnInit {
   taskForm: FormGroup;
   task?: Task;
   editMode = false;
+  userAuthEmail = this.authService.getCurrentUser()?.email;
+
+
+  currentUserEmail$: Observable<string | null | undefined> = this.authService.user$.pipe(
+    map(user => user?.email)
+  );
+
+  canManage$: Observable<boolean> = this.currentUserEmail$.pipe(
+    map(email => email === this.task?.author)
+  );
+  
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
     private taskService: TaskService,
+    private authService: AuthService,
     private dialog: MatDialog
   ) {
     this.taskForm = this.fb.group({
@@ -40,6 +54,7 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
     let taskId = this.route.snapshot.paramMap.get('id');
     if (taskId == null) {
       this.router.navigate(['/not-found']);

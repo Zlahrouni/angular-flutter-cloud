@@ -12,11 +12,11 @@
 
       <p class="text-gray-500" *ngIf="message">{{ message }}</p>
       
-      <p class="text-red-500" *ngIf="tasks.length === 0 && !message">
+      <p class="text-red-500" *ngIf="filteredTasks.length === 0 && !message">
         No tasks available.
       </p>
-
-      <div class="flex flex-wrap gap-3" *ngIf="tasks.length > 0">
+      
+      <div class="flex flex-wrap gap-3" *ngIf="filteredTasks.length > 0">
         <tm-task-card
           *ngFor="let task of filteredTasks"
           [title]="task.title"
@@ -24,6 +24,7 @@
           [status]="task.status"
           [id]="task.id"
           [date]="task.date"
+          [author]="task.author"
         ></tm-task-card>
       </div>
     </div>

@@ -2,7 +2,7 @@
   <div *ngIf="!this.editMode" class="bg-blue-300 shadow-lg rounded-lg p-6 w-full h-full max-w-4xl">
     <div class="flex justify-between items-center mb-4">
       <h2 class="text-2xl font-bold text-gray-800">{{ task?.title }}</h2>
-      <div>
+      <div *ngIf="userAuthEmail === task?.author">
         <button class="text-black hover:text-blue-700 mr-2" (click)="editTask()">
           Edit
         </button>
