@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:front_flutter/screen/task_details_page.dart';
 
 import '../models/task.dart';
 import '../services/task_service.dart';
@@ -112,6 +113,14 @@ class _TaskListPageState extends State<TaskListPage> {
                     child: ListTile(
                       title: Text(task.title),
                       subtitle: Text(task.description),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TaskDetailsPage(task: task),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 );
