@@ -6,7 +6,7 @@ import { TaskService } from '../../services/task.service';
 import { DateformatorPipe } from '../../pipes/dateformator.pipe';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import {NgIf} from "@angular/common";
+import {CommonModule, NgIf} from "@angular/common";
 import { map, Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -18,7 +18,8 @@ import { AuthService } from 'src/app/services/auth.service';
     DateformatorPipe,
     ReactiveFormsModule,
     NgIf,
-    FormsModule
+    FormsModule,
+    CommonModule
   ],
   styleUrls: ['./task-details.component.scss']
 })

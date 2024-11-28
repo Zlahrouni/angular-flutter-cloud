@@ -1,23 +1,30 @@
 
-    <div class="m-15 flex flex-col justify-center">
-      <h1 class="text-3xl py-5">All tasks:</h1>
-      
-      <button 
-        (click)="toggleFilter()" 
-        class="px-4 py-2 rounded-lg mb-4 w-fit"
-        [class]="showMyTasks ? 'bg-blue-500 text-white' : 'bg-gray-200'"
-      >
-        {{ showMyTasks ? 'Show All Tasks' : 'Show My Tasks' }}
-      </button>
+    <div class="container mx-auto px-4 py-8">
+      <header class="mb-8">
+          <h1 id="all-tasks" class="text-3xl font-bold mb-4">
+              All tasks:
+          </h1>
 
-      <p class="text-gray-500" *ngIf="message">{{ message }}</p>
-      
-      <p class="text-red-500" *ngIf="filteredTasks.length === 0 && !message">
-        No tasks available.
-      </p>
-      
-      <div class="flex flex-wrap gap-3" *ngIf="filteredTasks.length > 0">
-        <tm-task-card
+          <button class="bg-blue-500 hover:bg-blue-600 text-white
+                         px-4 py-2 rounded-lg transition-colors"
+                         (click)="toggleFilter()" >
+              {{ showMyTasks ? 'Show All Tasks' : 'Show My Tasks' }}
+          </button>
+      </header>
+
+      <div class="mb-4 text-gray-600">
+          {{ message }}
+      </div>
+
+      <div *ngIf="filteredTasks.length === 0" 
+           class="text-center text-gray-500 py-8">
+          No tasks available.
+      </div>
+
+      <div *ngIf="filteredTasks.length > 0" 
+           class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 
+                  gap-4">
+                          <tm-task-card
           *ngFor="let task of filteredTasks"
           [title]="task.title"
           [description]="task.description"
@@ -27,4 +34,4 @@
           [author]="task.author"
         ></tm-task-card>
       </div>
-    </div>
+  </div>
