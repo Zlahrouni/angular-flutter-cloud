@@ -87,6 +87,7 @@ class TaskService {
   Stream<List<Task>> streamTasksByAuthor(String author) {
     return _firestore.collection('task')
         .where('author', isEqualTo: author)
+        .orderBy('date', descending: true)
         .snapshots()
         .map((snapshot) {
       return snapshot.docs.map((doc) {
