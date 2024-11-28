@@ -53,13 +53,15 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   final AuthService authService = AuthService();
   bool showLogin = true;
   int pagination = 0;
+  late PageController _pageController = PageController(initialPage: pagination);
   late TabController paginationController = TabController(length: 3, initialIndex: pagination, vsync: this);
 
   void _onTaskAdded() {
     setState(() {
-      pagination = 0; // or 2, depending on your requirement
+      pagination = 2;
+      paginationController.animateTo(pagination);
     });
-    paginationController.animateTo(pagination);
+
   }
 
   @override
@@ -102,7 +104,18 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasData) {
-            return pagination == 1 ? AddTaskPage(onTaskAdded: _onTaskAdded) : TaskListPage(byAuthor: pagination == 2 ? authService.currentUser?.email != null? authService.currentUser!.email : null : null);
+            return PageView(
+              controller: _pageController,
+              onPageChanged: (index) {
+                pagination = index;
+                paginationController.animateTo(index);
+              },
+              children: [
+                TaskListPage(byAuthor: null),
+                AddTaskPage(onTaskAdded: _onTaskAdded),
+                TaskListPage(byAuthor: authService.currentUser?.email),
+              ],
+            );
           }
 
           return showLogin
