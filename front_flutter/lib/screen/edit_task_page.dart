@@ -15,13 +15,16 @@ class _EditTaskPageState extends State<EditTaskPage> {
   late TextEditingController _titleController;
   late TextEditingController _descriptionController;
   final TaskService _taskService = TaskService();
+  late String _selectedStatus;
+  final List<String> _statuses = ['todo', 'pending', 'done'];
 
   @override
   void initState() {
     super.initState();
-    // Initialize controllers with existing task data
     _titleController = TextEditingController(text: widget.task.title);
-    _descriptionController = TextEditingController(text: widget.task.description);
+    _descriptionController =
+        TextEditingController(text: widget.task.description);
+    _selectedStatus = widget.task.status;
   }
 
   @override
@@ -38,26 +41,46 @@ class _EditTaskPageState extends State<EditTaskPage> {
         title: const Text('Edit Task'),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextField(
-              controller: _titleController,
-              autofocus: true,
-              decoration: const InputDecoration(
-                hintText: 'Title',
-                labelText: 'Task Title',
+            Card(
+              elevation: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: _titleController,
+                      decoration: const InputDecoration(labelText: 'Title'),
+                    ),
+                    const SizedBox(height: 15),
+                    TextField(
+                      controller: _descriptionController,
+                      decoration: const InputDecoration(
+                          labelText: 'Description'),
+                    ),
+                    const SizedBox(height: 15),
+                    DropdownButtonFormField<String>(
+                      value: _selectedStatus,
+                      items: _statuses.map((String status) {
+                        return DropdownMenuItem<String>(
+                          value: status,
+                          child: Text(status),
+                        );
+                      }).toList(),
+                      onChanged: (newValue) {
+                        setState(() {
+                          _selectedStatus = newValue!;
+                        });
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'Status',
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _descriptionController,
-              decoration: const InputDecoration(
-                hintText: 'Description',
-                labelText: 'Task Description',
-              ),
-              maxLines: null,
             ),
             const SizedBox(height: 15),
             ElevatedButton(
@@ -72,18 +95,14 @@ class _EditTaskPageState extends State<EditTaskPage> {
                     title: title,
                     description: description,
                     author: widget.task.author,
-                    status: widget.task.status,
+                    status: _selectedStatus,
                     date: widget.task.date,
                   );
 
-                  // Update the task using the task service
                   try {
                     await _taskService.updateTask(widget.task.id, updatedTask);
-
-                    // Navigate back to the previous screen
                     Navigator.pop(context, updatedTask);
                   } catch (e) {
-                    // Show an error dialog if update fails
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('Failed to update task: ${e.toString()}'),
@@ -92,7 +111,6 @@ class _EditTaskPageState extends State<EditTaskPage> {
                     );
                   }
                 } else {
-                  // Show validation error
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Please fill in all fields'),
