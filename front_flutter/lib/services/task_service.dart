@@ -23,16 +23,17 @@ class TaskService {
   }
 
   // Add a new task to Firestore
-  Future<void> addTask(String title, String description) async {
+  Future<void> addTask(String title, String description, String author) async {
+    print('Adding task author: $author');
     Task newTask = Task(
         id: uuid.v4(),
         title: title,
         description: description,
+        author: author,
         status: 'todo',
         date: DateTime.now()
     );
-    print("TaskID: ${newTask.id}");
-    print("Task: ${newTask.toMap()}");
+    print('Adding task: ${newTask.toMap()}');
     try {
       await _firestore.collection('task').doc(newTask.id).set(newTask.toMap());  // Assuming Task has a toMap method
     } catch (e) {
@@ -76,21 +77,21 @@ class TaskService {
   }
 
   Stream<List<Task>> streamTasks() {
-    return _firestore.collection('task').snapshots().map((snapshot) {
+    return _firestore.collection('task').orderBy('date', descending: true).snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
         return Task.fromFirestore(doc);
       }).toList();
     });
   }
 
-  Stream<List<Task>> steamTasksByAuthor(String author) {
-    print('author: $author');
-    return _firestore.collection('task').where('author', isEqualTo: author).snapshots().map((snapshot) {
+  Stream<List<Task>> streamTasksByAuthor(String author) {
+    return _firestore.collection('task')
+        .where('author', isEqualTo: author)
+        .snapshots()
+        .map((snapshot) {
       return snapshot.docs.map((doc) {
         return Task.fromFirestore(doc);
       }).toList();
     });
   }
-
-
 }

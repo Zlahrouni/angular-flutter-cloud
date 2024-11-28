@@ -71,6 +71,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                     id: widget.task.id,
                     title: title,
                     description: description,
+                    author: widget.task.author,
                     status: widget.task.status,
                     date: widget.task.date,
                   );
