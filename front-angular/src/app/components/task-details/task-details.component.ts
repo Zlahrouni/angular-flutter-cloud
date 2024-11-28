@@ -69,15 +69,14 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   editTask() {
-    this.editMode = !this.editMode;
-
-    if (this.editMode) {
-      this.taskForm.setValue({
-        title: this.task?.title,
-        status: this.task?.status,
-        description: this.task?.description
+    if (this.task) {
+      this.taskForm.patchValue({
+        title: this.task.title,
+        description: this.task.description,
+        status: this.task.status.toLowerCase()
       });
     }
+    this.editMode = !this.editMode;
   }
 
   deleteTask() {
