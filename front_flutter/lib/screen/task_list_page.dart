@@ -112,11 +112,7 @@ class _TaskListPageState extends State<TaskListPage> {
                     color: nextStatutLabel == '' ? Colors.red.shade100 : Colors.transparent,
                     child: ListTile(
                       title: Text(task.title),
-                      subtitle: Text(
-                        task.description,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      subtitle: Text(task.description),
                       onTap: () {
                         Navigator.push(
                           context,
