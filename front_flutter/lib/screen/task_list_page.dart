@@ -18,19 +18,6 @@ class _TaskListPageState extends State<TaskListPage> {
   List<Task>? tasks;
 
   @override
-  void initState() {
-    super.initState();
-    _fetchTasks();
-  }
-
-  Future<void> _fetchTasks() async {
-    final fetchedTasks = await taskService.getTasks();
-    setState(() {
-      tasks = fetchedTasks;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
