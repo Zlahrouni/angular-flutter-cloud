@@ -48,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         backgroundColor: Colors.deepPurple[800],
         title: Text(
-          'Connexion',
+          'Login',
           style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold
@@ -67,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  'Connectez-vous',
+                  'Login to your account',
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -101,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(color: Colors.grey[800]),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Veuillez entrer votre email';
+                              return 'Please enter your email';
                             }
                             return null;
                           },
@@ -110,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(height: 20),
                         TextFormField(
                           decoration: InputDecoration(
-                            labelText: 'Mot de passe',
+                            labelText: 'Password',
                             labelStyle: TextStyle(color: Colors.deepPurple[700]),
                             focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.deepPurple[700]!),
@@ -137,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           obscureText: _obscurePassword,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Veuillez entrer votre mot de passe';
+                              return 'Please enter your password';
                             }
                             return null;
                           },
@@ -171,7 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   child: Text(
-                    'Se connecter',
+                    'Login',
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.white,
@@ -183,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextButton(
                   onPressed: widget.onRegisterTap,
                   child: Text(
-                    'Pas encore inscrit ? S\'inscrire',
+                    'Not registered yet? Sign up',
                     style: TextStyle(color: Colors.deepPurple[700]),
                   ),
                 ),
@@ -213,7 +213,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Image.asset('lib/assets/google.png', height: 24, width: 24),
                       const SizedBox(width: 10),
                       Text(
-                        'Se connecter avec Google',
+                        'Sign in with Google',
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.black87,
