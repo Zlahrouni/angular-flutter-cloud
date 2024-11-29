@@ -26,11 +26,11 @@
                           <tm-task-card
           *ngFor="let task of filteredTasks"
           [title]="task.title"
-          [description]="task.description"
+          [description]="task.description ? task.description : 'No description'"
           [status]="task.status"
           [id]="task.id"
           [date]="task.date"
-          [author]="task.author"
+          [author]="task.author ? task.author : 'Unkown'"
         ></tm-task-card>
       </div>
   </div>
