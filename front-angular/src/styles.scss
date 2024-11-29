@@ -7,3 +7,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.purple {
+    background: #673ab7;
+}
+
+.hover:purple-200 {
+    background: #9c7ad6;
+}
