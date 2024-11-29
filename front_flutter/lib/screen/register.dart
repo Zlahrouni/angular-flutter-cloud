@@ -30,7 +30,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       if (_password != _confirmPassword) {
         setState(() {
-          _error = 'Les mots de passe ne correspondent pas';
+          _error = 'Passwords do not match';
           _isLoading = false;
         });
         return;
@@ -57,7 +57,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       appBar: AppBar(
         backgroundColor: Colors.deepPurple[800],
         title: Text(
-          'Inscription',
+          'Register',
           style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold
@@ -76,7 +76,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  'Créez votre compte',
+                  'Create your account',
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -110,10 +110,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           style: TextStyle(color: Colors.grey[800]),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Veuillez entrer votre email';
+                              return 'Please enter your email';
                             }
                             if (!value.contains('@')) {
-                              return 'Veuillez entrer un email valide';
+                              return 'Please enter a valid email';
                             }
                             return null;
                           },
@@ -122,7 +122,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         const SizedBox(height: 20),
                         TextFormField(
                           decoration: InputDecoration(
-                            labelText: 'Mot de passe',
+                            labelText: 'Password',
                             labelStyle: TextStyle(color: Colors.deepPurple[700]),
                             focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.deepPurple[700]!),
@@ -149,10 +149,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           obscureText: _obscurePassword,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Veuillez entrer votre mot de passe';
+                              return 'Please enter your password';
                             }
                             if (value.length < 6) {
-                              return 'Le mot de passe doit contenir au moins 6 caractères';
+                              return 'Password must be at least 6 characters';
                             }
                             return null;
                           },
@@ -161,7 +161,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         const SizedBox(height: 20),
                         TextFormField(
                           decoration: InputDecoration(
-                            labelText: 'Confirmer le mot de passe',
+                            labelText: 'Confirm Password',
                             labelStyle: TextStyle(color: Colors.deepPurple[700]),
                             focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.deepPurple[700]!),
@@ -188,7 +188,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           obscureText: _obscureConfirmPassword,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Veuillez confirmer votre mot de passe';
+                              return 'Please confirm your password';
                             }
                             return null;
                           },
@@ -222,7 +222,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   child: Text(
-                    'S\'inscrire',
+                    'Register',
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.white,
@@ -234,7 +234,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 TextButton(
                   onPressed: widget.onLoginTap,
                   child: Text(
-                    'Déjà inscrit ? Connectez-vous',
+                    'Already registered? Sign in',
                     style: TextStyle(color: Colors.deepPurple[700]),
                   ),
                 ),
