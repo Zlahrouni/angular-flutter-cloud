@@ -15,8 +15,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions
-        .currentPlatform, // Use the generated configuration
+    options: DefaultFirebaseOptions.currentPlatform,
   );
 
   runApp(const MyApp());
@@ -25,14 +24,14 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'TaskMan',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        scaffoldBackgroundColor: Colors.grey[100],
       ),
       home: const MyHomePage(title: 'TaskMan'),
     );
@@ -53,27 +52,34 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   final AuthService authService = AuthService();
   bool showLogin = true;
   int pagination = 0;
+  late PageController _pageController = PageController(initialPage: pagination);
   late TabController paginationController = TabController(length: 3, initialIndex: pagination, vsync: this);
 
   void _onTaskAdded() {
     setState(() {
-      pagination = 0; // or 2, depending on your requirement
+      pagination = 2;
+      paginationController.animateTo(pagination);
     });
-    paginationController.animateTo(pagination);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        title: Image.asset('lib/assets/logo_long.png', height: 40),
+        centerTitle: true,
         actions: [
           StreamBuilder<User?>(
             stream: authService.authStateChanges,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return IconButton(
-                  icon: const Icon(Icons.logout),
+                  icon: Icon(
+                    Icons.logout,
+                    color: Colors.deepPurple[800],
+                  ),
                   onPressed: () async {
                     try {
                       await authService.logout();
@@ -85,7 +91,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 );
               } else {
                 return IconButton(
-                  icon: const Icon(Icons.account_circle),
+                  icon: Icon(
+                    Icons.account_circle,
+                    color: Colors.deepPurple[800],
+                  ),
                   onPressed: () {
                     // Navigation vers la page de profil ou de connexion
                   },
@@ -99,10 +108,25 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         stream: authService.authStateChanges,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(
+              child: CircularProgressIndicator(
+                color: Colors.deepPurple[300],
+              ),
+            );
           }
           if (snapshot.hasData) {
-            return pagination == 1 ? AddTaskPage(onTaskAdded: _onTaskAdded) : TaskListPage(byAuthor: pagination == 2 ? authService.currentUser?.email != null? authService.currentUser!.email : null : null);
+            return PageView(
+              controller: _pageController,
+              onPageChanged: (index) {
+                pagination = index;
+                paginationController.animateTo(index);
+              },
+              children: [
+                TaskListPage(byAuthor: null),
+                AddTaskPage(onTaskAdded: _onTaskAdded),
+                TaskListPage(byAuthor: authService.currentUser?.email),
+              ],
+            );
           }
 
           return showLogin
@@ -118,7 +142,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         stream: authService.authStateChanges,
         builder: (context, snapshot) => snapshot.hasData
             ? ConvexAppBar(
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.deepPurple[500],
+          color: Colors.white,
+          activeColor: Colors.white,
           controller: paginationController,
           items: const [
             TabItem(icon: Icons.home, title: 'Home'),
@@ -127,9 +153,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           ],
           initialActiveIndex: 0,
           onTap: (int i) {
-            setState(() {
-              pagination = i;
-            });
+            pagination = i;
+            _pageController.animateToPage(i,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut);
           },
         )
             : const SizedBox.shrink(),
