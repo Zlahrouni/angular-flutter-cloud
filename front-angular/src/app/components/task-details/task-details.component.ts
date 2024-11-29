@@ -6,7 +6,9 @@ import { TaskService } from '../../services/task.service';
 import { DateformatorPipe } from '../../pipes/dateformator.pipe';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import {NgIf} from "@angular/common";
+import {CommonModule, NgIf} from "@angular/common";
+import { map, Observable } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'tm-task-details',
@@ -16,7 +18,8 @@ import {NgIf} from "@angular/common";
     DateformatorPipe,
     ReactiveFormsModule,
     NgIf,
-    FormsModule
+    FormsModule,
+    CommonModule
   ],
   styleUrls: ['./task-details.component.scss']
 })
@@ -24,12 +27,24 @@ export class TaskDetailsComponent implements OnInit {
   taskForm: FormGroup;
   task?: Task;
   editMode = false;
+  userAuthEmail = this.authService.getCurrentUser()?.email;
+
+
+  currentUserEmail$: Observable<string | null | undefined> = this.authService.user$.pipe(
+    map(user => user?.email)
+  );
+
+  canManage$: Observable<boolean> = this.currentUserEmail$.pipe(
+    map(email => email === this.task?.author)
+  );
+  
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
     private taskService: TaskService,
+    private authService: AuthService,
     private dialog: MatDialog
   ) {
     this.taskForm = this.fb.group({
@@ -40,6 +55,7 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
     let taskId = this.route.snapshot.paramMap.get('id');
     if (taskId == null) {
       this.router.navigate(['/not-found']);
@@ -53,15 +69,14 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   editTask() {
-    this.editMode = !this.editMode;
-
-    if (this.editMode) {
-      this.taskForm.setValue({
-        title: this.task?.title,
-        status: this.task?.status,
-        description: this.task?.description
+    if (this.task) {
+      this.taskForm.patchValue({
+        title: this.task.title,
+        description: this.task.description,
+        status: this.task.status.toLowerCase()
       });
     }
+    this.editMode = !this.editMode;
   }
 
   deleteTask() {

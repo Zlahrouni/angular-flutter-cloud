@@ -1,11 +1,70 @@
-<div routerLink="task-details/{{id}}" id="{{id}}" class="bg-sky-300 min-w-[300px] p-4 border-2 rounded-lg transition-transform transform hover:scale-105 hover:shadow-lg">
-  <div class="" (click)="deleteTask(id!)">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-      <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-    </svg>
-  </div>
-  <p><strong>Title:</strong> {{ title! | truncate }}</p>
-  <p><strong>Description:</strong> {{ description! | truncate }}</p>
-  <p><strong>Status:</strong> {{ status }}</p>
-  <p><strong>Created at:</strong> {{ date | dateformator }}</p>
+<div [id]="id" 
+     [routerLink]="['task-details', id]"
+     class="bg-white rounded-xl shadow-md hover:shadow-xl p-6
+            transition-all duration-300 hover:scale-102 
+            cursor-pointer relative border border-gray-100
+            min-w-[300px]">
+    
+    <!-- Delete Button - Always visible -->
+    <button *ngIf="canDelete$ | async"
+            class="absolute top-4 right-4 p-2 rounded-full
+                   hover:bg-red-50 transition-all duration-300"
+            (click)="deleteTask(id!); $event.stopPropagation()">
+        <svg xmlns="http://www.w3.org/2000/svg" 
+             class="w-5 h-5 text-red-500"
+             fill="none" 
+             viewBox="0 0 24 24" 
+             stroke="currentColor">
+            <path stroke-linecap="round" 
+                  stroke-linejoin="round" 
+                  stroke-width="2" 
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        </svg>
+    </button>
+
+    <!-- Task Content -->
+    <div class="space-y-4">
+        <!-- Title -->
+        <div class="text-xl font-semibold text-gray-800 line-clamp-1">
+            {{ title! | smartTruncate:20 }}
+        </div>
+
+        <!-- Description -->
+        <p class="text-gray-600 text-sm line-clamp-2">
+            {{ description! | smartTruncate:20 }}
+        </p>
+
+        <!-- Metadata -->
+        <div class="pt-4 border-t border-gray-100 space-y-2">
+            <!-- Created Date -->
+            <div class="flex items-center text-sm text-gray-500">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                {{ date | dateformator }}
+            </div>
+
+            <!-- Author -->
+            <div class="flex items-center text-sm text-gray-500">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                {{ author }}
+            </div>
+
+            <!-- Status in bottom right -->
+            <div class="flex justify-end mt-2">
+                <span class="px-3 py-1 text-sm font-medium rounded-full"
+                    [ngClass]="{
+                      'bg-gray-100 text-gray-600': status?.toLowerCase() === 'todo',
+                      'bg-amber-100 text-amber-600': status?.toLowerCase() === 'pending',
+                      'bg-green-100 text-green-600': status?.toLowerCase() === 'done'
+                    }">
+                    {{ status }}
+                </span>
+            </div>
+        </div>
+    </div>
 </div>

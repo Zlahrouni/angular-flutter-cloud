@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 
 @Component({
@@ -8,7 +8,8 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
   standalone: true,
   templateUrl: './login.component.html',
   imports: [
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterLink
   ],
   styleUrls: ['./login.component.scss']
 })
@@ -31,7 +32,7 @@ export class LoginComponent {
       try {
         const { email, password } = this.loginForm.value;
         await this.authService.login(email, password);
-        await this.router.navigate(['/']);
+        await this.router.navigate(['']);
       } catch (error) {
         console.error('Erreur de connexion:', error);
       }
@@ -41,7 +42,7 @@ export class LoginComponent {
   async loginWithGoogle() {
     try {
       await this.authService.loginWithGoogle();
-      await this.router.navigate(['/home']);
+      await this.router.navigate(['']);
     } catch (error) {
       console.error('Erreur de connexion Google:', error);
     }

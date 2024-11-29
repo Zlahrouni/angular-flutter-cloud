@@ -1,19 +1,19 @@
-<nav class="flex justify-between items-center px-5 py-2 bg-gray-100">
+<nav class="flex justify-between items-center px-5" style="background-color: #f8f1fa;">
   <div routerLink="/">
-    <button class="font-bold bg-blue-300 py-1 px-2 rounded">TaskMan</button>
+    <img class="mx-auto w-auto" src="../../../assets/img/logo_long.png" style="height: 3rem;"  alt="TaskManager logo">
   </div>
   <div class="flex gap-2">
-    <a *ngIf="user$ | async as user;" class="bg-blue-300 hover:no-underline px-5 py-2 rounded-3xl hover:bg-gray-300 hover:text-black" routerLink="/add-task">Add task</a>
+    <a *ngIf="user$ | async as user;" class="purple text-white hover:no-underline px-5 py-2 rounded-3xl hover:bg-gray-300 hover:text-black" routerLink="/add-task">Add task</a>
     <ng-container *ngIf="user$ | async as user; else loginButton">
       <button (click)="logout()" class="text-white bg-gray-600 px-5 py-2 rounded-3xl hover:bg-gray-300 hover:text-black">Logout</button>
     </ng-container>
     <ng-template #loginButton>
-      <a routerLink="/"
+      <a routerLink="/login"
          class="text-white bg-gray-600 px-5 py-2 rounded-3xl hover:bg-gray-300 hover:text-black">
         Login
       </a>
       <a routerLink="/register"
-         class="text-white bg-gray-600 px-5 py-2 rounded-3xl hover:bg-gray-300 hover:text-black">
+         class="purple text-white hover:no-underline px-5 py-2 rounded-3xl hover:bg-gray-300 hover:text-black">
         Register
       </a>
     </ng-template>
