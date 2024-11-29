@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { 
+import {
   Firestore,
   collection,
   collectionData,
@@ -11,8 +11,9 @@ import {
   CollectionReference,
   DocumentReference
 } from '@angular/fire/firestore';
-import { Observable, from, map } from 'rxjs';
+import {Observable, from, map, switchMap} from 'rxjs';
 import { Task } from '../models/task-model';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root'
@@ -24,21 +25,22 @@ export class TaskService {
     this.taskCollection = collection(this.firestore, 'task') as CollectionReference<Task>;
   }
 
-  // Add a new task
-  addTask(task: Task): Observable<void> {
-    const taskWithTimestamp = {
-      ...task,
-      date: new Date()
+  // Update the addTask method in TaskService to ensure the returned object matches the Task type
+  addTask(title: string, description: string, author: string): Observable<Task> {
+    const taskWithTimestamp: Task = {
+      title,
+      description,
+      status: 'todo',
+      date: new Date(),
+      author
     };
 
-    return from(addDoc(this.taskCollection, taskWithTimestamp))
-      .pipe(
-        map(() => {
-          console.log('Task successfully added!');
-        })
-      );
+    return from(addDoc(this.taskCollection, taskWithTimestamp)).pipe(
+      switchMap(docRef => docData(docRef as DocumentReference<Task>).pipe(
+        map(task => ({ id: docRef.id, ...task } as Task))
+      ))
+    );
   }
-
   // Get all tasks
   getTasks(): Observable<Task[]> {
     return collectionData(this.taskCollection, { idField: 'id' });
@@ -71,4 +73,6 @@ export class TaskService {
         })
       );
   }
+
+
 }

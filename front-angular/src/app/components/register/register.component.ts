@@ -1,10 +1,24 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import {Router, RouterLink} from '@angular/router';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators
+} from '@angular/forms';
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'tm-register',
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    NgIf
+  ],
   templateUrl: './register.component.html'
 })
 export class RegisterComponent {
@@ -45,7 +59,7 @@ export class RegisterComponent {
       try {
         const { email, password } = this.registerForm.value;
         await this.authService.register(email, password);
-        await this.router.navigate(['/home']);
+        await this.router.navigate(['']);
       } catch (error) {
         console.error('Erreur d\'inscription:', error);
       }
@@ -55,7 +69,7 @@ export class RegisterComponent {
   async loginWithGoogle() {
     try {
       await this.authService.loginWithGoogle();
-      await this.router.navigate(['/home']);
+      await this.router.navigate(['']);
     } catch (error) {
       console.error('Erreur de connexion Google:', error);
     }

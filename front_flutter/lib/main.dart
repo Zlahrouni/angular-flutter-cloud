@@ -1,7 +1,12 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:front_flutter/screen/add_task_page.dart';
+import 'package:front_flutter/screen/auth.dart';
+import 'package:front_flutter/screen/register.dart';
 import 'package:front_flutter/screen/task_list_page.dart';
+import 'package:front_flutter/services/auth_service.dart';
 import 'package:front_flutter/services/task_service.dart';
 
 import 'firebase_options.dart';
@@ -10,7 +15,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform, // Use the generated configuration
+    options: DefaultFirebaseOptions.currentPlatform,
   );
 
   runApp(const MyApp());
@@ -19,16 +24,16 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'TaskMan',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        scaffoldBackgroundColor: Colors.grey[100],
       ),
-      home: const MyHomePage(title: 'Flutter Demo Homef Page'),
+      home: const MyHomePage(title: 'TaskMan'),
     );
   }
 }
@@ -42,33 +47,120 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   final TaskService taskService = TaskService();
+  final AuthService authService = AuthService();
+  bool showLogin = true;
+  int pagination = 0;
+  late PageController _pageController = PageController(initialPage: pagination);
+  late TabController paginationController = TabController(length: 3, initialIndex: pagination, vsync: this);
+
+  void _onTaskAdded() {
+    setState(() {
+      pagination = 2;
+      paginationController.animateTo(pagination);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        title: Image.asset('lib/assets/logo_long.png', height: 40),
+        centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.account_circle),
-            onPressed: () {
-              // Navigate to profile page
+          StreamBuilder<User?>(
+            stream: authService.authStateChanges,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return IconButton(
+                  icon: Icon(
+                    Icons.logout,
+                    color: Colors.deepPurple[800],
+                  ),
+                  onPressed: () async {
+                    try {
+                      await authService.logout();
+                    } catch (e) {
+                      print('Erreur de déconnexion: $e');
+                    }
+                  },
+                  tooltip: 'Déconnexion',
+                );
+              } else {
+                return IconButton(
+                  icon: Icon(
+                    Icons.account_circle,
+                    color: Colors.deepPurple[800],
+                  ),
+                  onPressed: () {
+                    // Navigation vers la page de profil ou de connexion
+                  },
+                );
+              }
             },
           ),
         ],
       ),
-      body: const TaskListPage(),
-      bottomNavigationBar: ConvexAppBar(
-        backgroundColor: Colors.grey,
+      body: StreamBuilder<User?>(
+        stream: authService.authStateChanges,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(
+                color: Colors.deepPurple[300],
+              ),
+            );
+          }
+          if (snapshot.hasData) {
+            return PageView(
+              controller: _pageController,
+              onPageChanged: (index) {
+                pagination = index;
+                paginationController.animateTo(index);
+              },
+              children: [
+                TaskListPage(byAuthor: null),
+                AddTaskPage(onTaskAdded: _onTaskAdded),
+                TaskListPage(byAuthor: authService.currentUser?.email),
+              ],
+            );
+          }
 
-        items: const [
-          TabItem(icon: Icons.add, title: 'Add'),
-        ],
-        initialActiveIndex: 0, //optional, default as 0
-        onTap: (int i) => print('click index=$i'),
-      )
+          return showLogin
+              ? LoginScreen(
+            onRegisterTap: () => setState(() => showLogin = false),
+          )
+              : RegisterScreen(
+            onLoginTap: () => setState(() => showLogin = true),
+          );
+        },
+      ),
+      bottomNavigationBar: StreamBuilder<User?>(
+        stream: authService.authStateChanges,
+        builder: (context, snapshot) => snapshot.hasData
+            ? ConvexAppBar(
+          backgroundColor: Colors.deepPurple[500],
+          color: Colors.white,
+          activeColor: Colors.white,
+          controller: paginationController,
+          items: const [
+            TabItem(icon: Icons.home, title: 'Home'),
+            TabItem(icon: Icons.add, title: 'Add'),
+            TabItem(icon: Icons.person, title: 'My tasks'),
+          ],
+          initialActiveIndex: 0,
+          onTap: (int i) {
+            pagination = i;
+            _pageController.animateToPage(i,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut);
+          },
+        )
+            : const SizedBox.shrink(),
+      ),
     );
   }
 }

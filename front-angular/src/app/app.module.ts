@@ -15,6 +15,13 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
+import { AddTaskComponent } from './components/add-task/add-task.component';
+import { TaskDetailsComponent } from './components/task-details/task-details.component';
+import { TaskCardComponent } from './components/task-card/task-card.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogModule} from "@angular/material/dialog";
+import {NotFoundComponent} from "./components/not-found/not-found.component";
+
 
 
 @NgModule({
@@ -22,19 +29,25 @@ import { RegisterComponent } from './components/register/register.component';
     AppComponent,
     NavarComponent,
     HomeComponent,
-    LoginComponent,
-    RegisterComponent
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    AddTaskComponent,
+    MatDialogModule,
+    TaskDetailsComponent,
+    TaskCardComponent,
+    LoginComponent,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     provideAuth(() => getAuth()),
-    provideStorage(() => getStorage())
+    provideStorage(() => getStorage()),
+    BrowserAnimationsModule
   ],
   providers: [],
+  exports: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
