@@ -94,7 +94,8 @@ class _AddTaskPageState extends State<AddTaskPage> with SingleTickerProviderStat
                         const SizedBox(height: 20),
                         TextField(
                           controller: _descriptionController,
-                          maxLines: 3,
+                          maxLines: null,
+                          keyboardType: TextInputType.multiline,
                           decoration: InputDecoration(
                             labelText: 'Description',
                             labelStyle: TextStyle(color: Colors.deepPurple[700]),
@@ -107,7 +108,10 @@ class _AddTaskPageState extends State<AddTaskPage> with SingleTickerProviderStat
                             ),
                             alignLabelWithHint: true,
                           ),
-                          style: TextStyle(color: Colors.grey[800]),
+                          style: TextStyle(
+                            color: Colors.grey[800],
+                            height: 1.5,
+                          ),
                         ),
                       ],
                     ),
@@ -155,7 +159,7 @@ class _AddTaskPageState extends State<AddTaskPage> with SingleTickerProviderStat
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Add Task',
                     style: TextStyle(
                       fontSize: 18,

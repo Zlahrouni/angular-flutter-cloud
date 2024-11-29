@@ -68,14 +68,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Text(
-          widget.title,
-          style: TextStyle(
-            color: Colors.deepPurple[800],
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
-        ),
+        title: Image.asset('lib/assets/logo_long.png', height: 40),
         centerTitle: true,
         actions: [
           StreamBuilder<User?>(
